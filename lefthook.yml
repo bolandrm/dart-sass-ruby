@@ -2,5 +2,5 @@ pre-commit:
   parallel: true
   commands:
     standardrb:
-      glob: "{*.rb,*.rake,Gemfile}"
+      glob: "{*.rb,*.rake,Gemfile,*.gemspec}"
       run: bin/bundle exec standardrb {staged_files} --auto-correct && git add {staged_files}
