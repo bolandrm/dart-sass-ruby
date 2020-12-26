@@ -1,4 +1,6 @@
 # frozen_string_literal: true
 
-module Protocol
+module DartSass
+  module Protocol
+  end
 end

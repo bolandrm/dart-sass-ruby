@@ -10,6 +10,8 @@ module DartSass
   class ProtocolError < BaseError; end
 
   class NotRenderedError < BaseError; end
+
+  class UnknownError < BaseError; end
   # class InvalidStyleError < BaseError; end
   # class UnsupportedValue < BaseError; end
 

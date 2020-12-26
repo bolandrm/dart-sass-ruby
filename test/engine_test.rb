@@ -210,7 +210,7 @@ module DartSass
       temp_file("included_2/import.scss", "@import 'import_parent'; $size: $s;")
       temp_file("styles.scss", "@import 'import.scss'; .hi { width: $size; }")
 
-      assert_raises(SyntaxError) do
+      assert_raises(ImportError) do
         Engine.new(File.read(temp_file_path("styles.scss"))).render
       end
     end
