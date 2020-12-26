@@ -2,13 +2,14 @@
 
 require "pathname"
 
-module SassC
+module DartSass
   class BaseError < StandardError; end
 
   class ImportError < BaseError; end
 
   class ProtocolError < BaseError; end
-  # class NotRenderedError < BaseError; end
+
+  class NotRenderedError < BaseError; end
   # class InvalidStyleError < BaseError; end
   # class UnsupportedValue < BaseError; end
 

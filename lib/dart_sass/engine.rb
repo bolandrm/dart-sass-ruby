@@ -55,6 +55,11 @@ module DartSass
       tempfile.unlink # deletes the temp file
     end
 
+    def source_map
+      raise NotRenderedError unless @source_map
+      @source_map
+    end
+
     def load_paths
       (@options[:load_paths] || []) + DartSass.load_paths
     end

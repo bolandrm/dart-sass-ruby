@@ -40,6 +40,7 @@ end
 require_relative "embedded-protocol/embedded_sass_pb"
 require_relative "dart_sass/version"
 require_relative "dart_sass/engine"
+require_relative "dart_sass/error"
 require_relative "dart_sass/protocol"
 require_relative "dart_sass/protocol/client"
 require_relative "dart_sass/protocol/compile_request"
