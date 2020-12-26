@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "open3"
-require "tempfile"
 require "stringio"
 
 module DartSass
@@ -9,6 +8,9 @@ module DartSass
     def initialize(template, options = {})
       @template = template
       @options = options
+
+      @options[:syntax] ||= :scss
+      @options[:style] ||= :expanded
 
       if @options[:precision]
         Logger.info "DEPRECATION WARNING: Dart Sass does not support passing a custom `precision`: https://github.com/sass/dart-sass#javascript-api"
@@ -19,15 +21,13 @@ module DartSass
     end
 
     def render
-      tempfile = Tempfile.new
-      tempfile.write(@template)
-      tempfile.rewind
-
       compile_request = Protocol::CompileRequest.new(
         id: 1234,
-        path: tempfile.path,
-        style: :expanded,
-        load_paths: load_paths
+        content: @template,
+        template_path: @options[:template_path],
+        style: @options[:style],
+        load_paths: load_paths,
+        syntax: @options[:syntax]
       )
       client = Protocol::Client.new
       compile_response = nil
@@ -50,9 +50,6 @@ module DartSass
 
       css = compile_response.css
       css.dup.force_encoding(@template.encoding)
-    ensure
-      tempfile.close
-      tempfile.unlink # deletes the temp file
     end
 
     def source_map

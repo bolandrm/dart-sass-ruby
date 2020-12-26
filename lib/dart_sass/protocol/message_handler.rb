@@ -41,7 +41,11 @@ module DartSass
             if /Can't find stylesheet to import/.match?(failure.message)
               raise ImportError.new("#{failure.message}: #{failure.span&.context}")
             else
-              raise UnknownError.new(failure.message)
+              raise SyntaxError.new(
+                failure.message,
+                filename: failure.span&.url,
+                line: failure.span&.start&.line
+              )
             end
           end
         else

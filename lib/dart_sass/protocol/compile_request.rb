@@ -3,18 +3,24 @@
 module DartSass
   module Protocol
     class CompileRequest
-      def initialize(id:, path:, style:, load_paths:)
+      def initialize(id:, content:, style:, load_paths:, syntax:, template_path: nil)
         @id = id
-        @path = path
+        @content = content
+        @template_path = template_path
         @style = style
         @load_paths = load_paths
+        @syntax = syntax
       end
 
       def message
         Sass::EmbeddedProtocol::InboundMessage.new(
           compileRequest: Sass::EmbeddedProtocol::InboundMessage::CompileRequest.new({
             id: @id,
-            path: @path,
+            string: Sass::EmbeddedProtocol::InboundMessage::CompileRequest::StringInput.new({
+              source: @content,
+              syntax: syntax,
+              url: @template_path
+            }),
             style: style,
             importers: importers
           })
@@ -25,6 +31,14 @@ module DartSass
 
       def style
         Sass::EmbeddedProtocol::InboundMessage::CompileRequest::OutputStyle.const_get(@style.to_s.upcase)
+      end
+
+      def syntax
+        if @syntax.to_sym == :sass
+          Sass::EmbeddedProtocol::InboundMessage::Syntax::INDENTED
+        else
+          Sass::EmbeddedProtocol::InboundMessage::Syntax::SCSS
+        end
       end
 
       def importers

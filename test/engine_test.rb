@@ -222,9 +222,10 @@ module DartSass
           width: $size
       SASS
 
-      css = <<~CSS
+      css = <<~CSS.chomp
         .foo {
-          width: 30px; }
+          width: 30px;
+        }
       CSS
 
       assert_equal css, Engine.new(sass, syntax: :sass).render
@@ -280,12 +281,10 @@ module DartSass
 
     def test_import_plain_css
       temp_file("test.css", ".something{color: red}")
-      expected_output = <<~CSS
-        .something {
-          color: red; }
-      CSS
+      expected_output = ".something {\n  color: red;\n}"
 
-      output = Engine.new("@import 'test'").render
+      output = Engine.new("@import 'test'",
+        load_paths: [temp_file_path(".")]).render
       assert_equal expected_output, output
     end
   end
