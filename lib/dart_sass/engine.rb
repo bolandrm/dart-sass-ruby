@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "open3"
-require "stringio"
+require "base64"
 
 module DartSass
   class Engine
@@ -27,7 +27,8 @@ module DartSass
         template_path: @options[:template_path],
         style: @options[:style],
         load_paths: load_paths,
-        syntax: @options[:syntax]
+        syntax: @options[:syntax],
+        source_map_contents: @options[:source_map_contents]
       )
       client = Protocol::Client.new
       compile_response = nil
@@ -49,6 +50,24 @@ module DartSass
       end
 
       css = compile_response.css
+
+      if @options[:source_map_contents]
+        @source_map = compile_response.source_map
+
+        if @options[:source_map_file]
+          File.open(@options[:source_map_file], "w") { |f| f.write(@source_map) }
+        end
+
+        unless @options[:omit_source_map_url]
+          embedded_source_map = <<-MAP
+          /*
+          //@ sourceMappingURL=data:application/json;base64,#{Base64.encode64(@source_map)}
+          */
+          MAP
+          css += embedded_source_map
+        end
+      end
+
       css.dup.force_encoding(@template.encoding)
     end
 

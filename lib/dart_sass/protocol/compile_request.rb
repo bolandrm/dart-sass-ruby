@@ -3,13 +3,14 @@
 module DartSass
   module Protocol
     class CompileRequest
-      def initialize(id:, content:, style:, load_paths:, syntax:, template_path: nil)
+      def initialize(id:, content:, style:, load_paths:, syntax:, template_path: nil, source_map_contents: false)
         @id = id
         @content = content
         @template_path = template_path
         @style = style
         @load_paths = load_paths
         @syntax = syntax
+        @source_map_contents = source_map_contents
       end
 
       def message
@@ -22,6 +23,7 @@ module DartSass
               url: @template_path
             }),
             style: style,
+            source_map: @source_map_contents,
             importers: importers
           })
         )
