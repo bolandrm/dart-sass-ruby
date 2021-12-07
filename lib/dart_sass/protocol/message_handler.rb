@@ -31,7 +31,7 @@ module DartSass
           raise outbound_message.error
         end
 
-        if (compile_response = outbound_message.compileResponse)
+        if (compile_response = outbound_message.compile_response)
           if compile_response.success
             @success = true
             @compile_response = compile_response.success

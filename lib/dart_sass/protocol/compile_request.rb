@@ -15,7 +15,7 @@ module DartSass
 
       def message
         Sass::EmbeddedProtocol::InboundMessage.new(
-          compileRequest: Sass::EmbeddedProtocol::InboundMessage::CompileRequest.new({
+          compile_request: Sass::EmbeddedProtocol::InboundMessage::CompileRequest.new({
             id: @id,
             string: Sass::EmbeddedProtocol::InboundMessage::CompileRequest::StringInput.new({
               source: @content,
@@ -32,14 +32,14 @@ module DartSass
       private
 
       def style
-        Sass::EmbeddedProtocol::InboundMessage::CompileRequest::OutputStyle.const_get(@style.to_s.upcase)
+        Sass::EmbeddedProtocol::OutputStyle.const_get(@style.to_s.upcase)
       end
 
       def syntax
         if @syntax.to_sym == :sass
-          Sass::EmbeddedProtocol::InboundMessage::Syntax::INDENTED
+          Sass::EmbeddedProtocol::Syntax::INDENTED
         else
-          Sass::EmbeddedProtocol::InboundMessage::Syntax::SCSS
+          Sass::EmbeddedProtocol::Syntax::SCSS
         end
       end
 
