@@ -48,6 +48,25 @@ module DartSass
               )
             end
           end
+        elsif (log_event = outbound_message.log_event)
+          puts log_event.formatted
+          # if compile_response.success
+          #   @success = true
+          #   @compile_response = compile_response.success
+          # else
+          #   failure = compile_response.failure
+
+          #   if /Can't find stylesheet to import/.match?(failure.message)
+          #     raise ImportError.new("#{failure.message}: #{failure.span&.context}")
+          #   else
+          #     raise SyntaxError.new(
+          #       failure.message,
+          #       filename: failure.span&.url,
+          #       line: failure.span&.start&.line
+          #     )
+          #   end
+          # end
+
         else
           raise "unknown response #{outbound_message.to_json}"
         end

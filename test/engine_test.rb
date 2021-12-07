@@ -6,8 +6,6 @@ module DartSass
   class EngineTest < MiniTest::Test
     include TempFileTest
 
-    # include TempFileTest
-
     def render(data)
       Engine.new(data).render
     end

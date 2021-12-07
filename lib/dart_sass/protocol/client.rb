@@ -20,12 +20,12 @@ module DartSass
 
       def write(inbound_message)
         encoded = inbound_message.to_proto
-        @stdin.write([encoded.bytesize].pack("V"))
+        @stdin.write(Varint.encode(encoded.bytesize))
         @stdin.write(encoded)
       end
 
       def get_message
-        length = @stdout.read(4).unpack1("V") # read 32 bit unsigned int
+        length = Varint.decode(@stdout)
         response = @stdout.read(length)
         Sass::EmbeddedProtocol::OutboundMessage.decode(response)
       end
