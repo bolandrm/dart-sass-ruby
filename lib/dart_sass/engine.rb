@@ -51,6 +51,8 @@ module DartSass
 
       css = compile_response.css
 
+      @dependencies = compile_response.loaded_urls.map { |url| LoadedDependency.new(url) }
+
       if @options[:source_map_contents]
         @source_map = compile_response.source_map
 
@@ -74,6 +76,10 @@ module DartSass
     def source_map
       raise NotRenderedError unless @source_map
       @source_map
+    end
+
+    def dependencies
+      @dependencies || []
     end
 
     def load_paths

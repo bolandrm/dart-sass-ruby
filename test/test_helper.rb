@@ -43,7 +43,8 @@ module TempFileTest
     @construct.directory(directory)
   end
 
-  def temp_file_path(path)
+  def temp_file_path(path = nil)
+    return File.join(@construct) unless path
     File.join(@construct, path)
   end
 end

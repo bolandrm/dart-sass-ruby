@@ -59,9 +59,10 @@ module DartSass
 
     def test_precision
       template = <<~SCSS
+        @use "sass:math";
         $var: 1;
         .foo {
-          baz: $var / 3; }
+          baz: math.div($var, 3); }
       SCSS
       expected_output = <<~CSS.chomp
         .foo {
@@ -73,7 +74,6 @@ module DartSass
     end
 
     def test_dependency_filenames_are_reported
-      skip "dependencies dont seem to be supported by dart-sass"
       base = temp_dir("").to_s
 
       temp_file("not_included.scss", "$size: 30px;")
@@ -81,7 +81,10 @@ module DartSass
       temp_file("import.scss", "@import 'import_parent'; $size: 30px;")
       temp_file("styles.scss", "@import 'import.scss'; .hi { width: $size; }")
 
-      engine = Engine.new(File.read("styles.scss"))
+      engine = Engine.new(
+        File.read(temp_file_path("styles.scss")),
+        load_paths: [base]
+      )
       engine.render
       deps = engine.dependencies
 
@@ -91,7 +94,6 @@ module DartSass
     end
 
     def test_no_dependencies
-      skip "dependencies dont seem to be supported by dart-sass"
       engine = Engine.new("$size: 30px;")
       engine.render
       deps = engine.dependencies
