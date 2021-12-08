@@ -9,5 +9,9 @@ module DartSass
     def options
       {filename: filename}
     end
+
+    def self.from_filenames(filenames)
+      filenames.map { |f| new(f) }
+    end
   end
 end

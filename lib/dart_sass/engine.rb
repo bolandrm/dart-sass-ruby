@@ -24,7 +24,7 @@ module DartSass
       compile_request = Protocol::CompileRequest.new(
         id: 1234,
         content: @template,
-        template_path: @options[:template_path],
+        template_path: @options[:filename],
         style: @options[:style],
         load_paths: load_paths,
         syntax: @options[:syntax],
@@ -50,8 +50,7 @@ module DartSass
       end
 
       css = compile_response.css
-
-      @dependencies = compile_response.loaded_urls.map { |url| LoadedDependency.new(url) }
+      @dependencies = LoadedDependency.from_filenames(compile_response.loaded_urls)
 
       if @options[:source_map_contents]
         @source_map = compile_response.source_map
@@ -84,6 +83,10 @@ module DartSass
 
     def load_paths
       (@options[:load_paths] || []) + DartSass.load_paths
+    end
+
+    def filename
+      @options[:filename]
     end
   end
 end
