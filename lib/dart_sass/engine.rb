@@ -10,13 +10,13 @@ module DartSass
       @options = options
 
       @options[:syntax] ||= :scss
-      @options[:style] ||= :expanded
+      @options[:style] = normalize_style(@options[:style])
 
       if @options[:precision]
-        Logger.info "DEPRECATION WARNING: Dart Sass does not support passing a custom `precision`: https://github.com/sass/dart-sass#javascript-api"
+        DartSass.logger.info "DEPRECATION WARNING: Dart Sass does not support passing a custom `precision`: https://github.com/sass/dart-sass#javascript-api"
       end
       if @options[:line_comments]
-        Logger.info "DEPRECATION WARNING: Dart Sass does not support source comments: https://github.com/sass/dart-sass#javascript-api"
+        DartSass.logger.info "DEPRECATION WARNING: Dart Sass does not support source comments: https://github.com/sass/dart-sass#javascript-api"
       end
     end
 
@@ -87,6 +87,23 @@ module DartSass
 
     def filename
       @options[:filename]
+    end
+
+    def normalize_style(style)
+      return :expanded unless style
+
+      style = style.to_s.gsub(/^sass_style_/, "").to_sym
+
+      if style == :nested
+        DartSass.logger.info "DEPRECATION WARNING: nested style removed.  Using 'expanded' instead"
+        return :expanded
+      end
+      if style == :compact
+        DartSass.logger.info "DEPRECATION WARNING: compact style removed.  Using 'expanded' instead"
+        return :expanded
+      end
+
+      style
     end
   end
 end

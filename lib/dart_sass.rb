@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "logger"
+
 module DartSass
   class << self
     attr_writer :logger

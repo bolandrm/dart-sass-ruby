@@ -33,6 +33,8 @@ module DartSass
 
       def style
         Sass::EmbeddedProtocol::OutputStyle.const_get(@style.to_s.upcase)
+      rescue NameError
+        raise InvalidStyleError.new
       end
 
       def syntax
